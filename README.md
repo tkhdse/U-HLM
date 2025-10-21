@@ -5,5 +5,5 @@ Uncertainty-Aware Hybrid Inference with On-Device Small and Remote Large Languag
 
 
 
-SLM (on local device): TinyLlama-1.1B,
+SLM (on local device): TinyLlama-1.1B
 LLM (based in Cloud): Llama22-7B

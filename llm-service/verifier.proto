@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+// Service defining the methods for the LLM verification process.
+service LLMVerifier {
+  // Unary RPC method for checking a batch of speculative tokens.
+  rpc VerifyTokens (VerificationRequest) returns (VerificationResponse);
+}
+
+// ------------------------------------
+// Request Message (Sent by SLM Agent/Router)
+// ------------------------------------
+message VerificationRequest {
+  // The tokenized prompt sequence, including the speculative draft tokens.
+  string prompt = 1;
+  
+  // Unique ID for tracking the request across the distributed system.
+  string request_id = 2;
+  
+  // A simple representation of sampling parameters (e.g., deterministic sampling).
+  double temperature = 3; 
+
+  // The size of the full model vocabulary (used for dimensioning the response).
+  int32 vocab_size = 4;
+}
+
+// ------------------------------------
+// Response Message (Sent by LLM Service back to Router/SLM)
+// ------------------------------------
+message VerificationResponse {
+  // The final, accepted text (sequence of tokens) determined by the LLM.
+  string final_text = 1;
+  
+  // The raw logits (unnormalized scores) for the next predicted token position.
+  // We use "bytes" for efficiency, as this will be a large float array/tensor.
+  // The client must deserialize these bytes back into a float tensor.
+  bytes raw_logits = 2; 
+
+  // The final list of verified token IDs, allowing the client to update its cache.
+  repeated int32 verified_token_ids = 3;
+}

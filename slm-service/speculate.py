@@ -49,7 +49,7 @@ def adaptive_offload(u_t, prompt, result):
         "probs": result["base_probs"].tolist(),
         "uncertainty": u_t,
     }
-    response = requests.post("http://<server-ip>:8080/verify", json=payload)
+    # response = requests.post("http://<server-ip>:8080/verify", json=payload)
     r = response.json()
     final_token_id = r["final_token"]
 
