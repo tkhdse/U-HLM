@@ -1,5 +1,7 @@
 import httpx
 import numpy as np
+import grpc
+import requests
 
 class LlamaClient:
     def __init__(self, host="127.0.0.1", port=8080):
@@ -22,3 +24,9 @@ class LlamaClient:
             probs /= np.sum(probs)
             return probs
 
+    # async def ping(self):
+    #     channel = grpc
+
+
+res = requests.get("10.42.22.29:8000/healthz")
+print(res)

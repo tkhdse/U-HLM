@@ -34,7 +34,6 @@ if __name__ == "__main__":
 
     def run_grpc():
         asyncio.run(serve_grpc())
+
     grpc_thread = threading.Thread(target=run_grpc, daemon=True)
-    # loop = asyncio.get_event_loop()
-    # loop.create_task(serve_grpc())
     uvicorn.run(app, host="0.0.0.0", port=8080)
