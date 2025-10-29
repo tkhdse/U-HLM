@@ -21,3 +21,4 @@ class LlamaClient:
             probs = np.exp(logits - np.max(logits))
             probs /= np.sum(probs)
             return probs
+
