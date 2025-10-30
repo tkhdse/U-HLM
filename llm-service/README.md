@@ -1,4 +1,8 @@
-This is the U-HLM LLM-servce.
+# U-HLM LLM-Service
+
+## System Architecture
+<img width="1462" height="484" alt="image" src="https://github.com/user-attachments/assets/f7029ae4-6ea6-4030-af32-03b43b95d8b3" />
+
 
 To run: 
 
