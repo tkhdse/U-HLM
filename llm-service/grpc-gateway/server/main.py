@@ -13,6 +13,7 @@ app = FastAPI(title="UHLM Gateway", version="0.1")
 
 @app.get("/healthz")
 def healthz():
+    print("hit endpoint")
     return {"status": "ok"}
 
 @app.get("/metrics")
@@ -36,4 +37,6 @@ if __name__ == "__main__":
         asyncio.run(serve_grpc())
 
     grpc_thread = threading.Thread(target=run_grpc, daemon=True)
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    # loop = asyncio.get_event_loop()
+    # loop.create_task(serve_grpc())
+    uvicorn.run(app, host="0.0.0.0", port=8000)
