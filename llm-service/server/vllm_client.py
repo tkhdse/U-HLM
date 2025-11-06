@@ -34,6 +34,8 @@ class VLLMClient:
             sampling_params=SamplingParams(temperature=1.0, logprobs=1),
             request_id=request_id
         )
+
+        print(outputs)
         
         # Extract logits and convert to probabilities
         # This depends on vLLM's output format
@@ -42,5 +44,5 @@ class VLLMClient:
         probs /= np.sum(probs)
         return probs.astype(np.float32)
 
-res = requests.get("http://10.42.22.29:8000/healthz")
-print(res)
+# res = requests.get("http://10.42.22.29:8000/healthz")
+# print(res)

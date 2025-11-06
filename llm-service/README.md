@@ -13,15 +13,16 @@ python3 -m venv venv
 pip install -r requirements.txt
 ```
 
-2. Run FastAPI server:
+2. Run gRPC server:
 ```
 # run as a module
-python3 -m grpc-gateway.server.main
+python3 -m server.main
 
 ```
 
 
-3. Test the llama_client:
+3. Test the vllm_client:
 ```
-python3 -m grpc-gateway.server.llama_client 
+python3 test_client.py
 ```
+
