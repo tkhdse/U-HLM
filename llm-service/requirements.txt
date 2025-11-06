@@ -1,8 +1,6 @@
 grpcio
 grpcio-tools
 grpcio_reflection
-fastapi
-uvicorn[standard]
 httpx
 numpy
 pyyaml

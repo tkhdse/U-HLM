@@ -1,13 +1,13 @@
 import numpy as np
 from . import verifier
-from .llama_client import LlamaClient
+from .vllm_client import VLLMClient
 from .session_manager import SessionManager
 from . import uhlm_pb2, uhlm_pb2_grpc
 
 class UHLMService(uhlm_pb2_grpc.UHLMServicer):
-    def __init__(self):
+    def __init__(self, model_id):
         self.sessions = SessionManager()
-        self.llm = LlamaClient()
+        self.llm = VLLMClient(model_id=model_id)
 
     async def BeginSession(self, request, context):
         sid, pos = self.sessions.begin(request.prompt)
