@@ -1,7 +1,7 @@
 import numpy as np
 from vllm import LLMEngine, SamplingParams
 from vllm.engine.arg_utils import EngineArgs
-from vllm.sequence import SequenceGroup, SequenceData
+# from vllm.sequence import SequenceGroup, SequenceData
 
 class VLLMClient:
     def __init__(self, model_id="meta-llama/Llama-2-7b-hf", tensor_parallel_size=1):
@@ -26,23 +26,44 @@ class VLLMClient:
         request_id = f"req_{id(session_text)}"
         prompt_token_ids = input_ids
         
-        # Get logits from vLLM engine
-        # Note: This is simplified - vLLM's engine API is async but complex
-        # You may need to adapt based on vLLM version
-        outputs = self.engine.generate(
-            prompt_token_ids=prompt_token_ids,
-            sampling_params=SamplingParams(temperature=1.0, logprobs=1),
-            request_id=request_id
-        )
+        try:
+            self.engine.add_request(
+                request_id=request_id,
+                prompt=session_text,
+                params=SamplingParams(temperature=1.0, logprobs=1)
+            )
+        except ValueError as e:
+            # Handle cases where request validation fails (e.g., prompt too long)
+            print(f"Error adding request {request_id}: {e}")
+            return None
 
-        print(outputs)
-        
+
+        final_output = None
+
+        while True:
+            request_outputs = self.engine.step()
+            for request_output in request_outputs:
+                if request_output.request_id == request_id:
+                    final_output = request_output
+                    if final_output.finished:
+                        break
+
+            if not self.engine.has_unfinished_requests():
+                break
+
+
+        print("output: ", final_output)
+
         # Extract logits and convert to probabilities
-        # This depends on vLLM's output format
-        logits = outputs[0].logprobs  # Adjust based on actual API
+        if final_output and final_output.outputs:
+                # Access the custom logits tensor (Requires your custom vLLM build)
+                raw_logits = final_output.outputs[0].logits_tensor 
+                verified_text = final_output.outputs[0].text
+
+                print(raw_logits)
+                print(verified_text)
+
+
         probs = np.exp(logits - np.max(logits))
         probs /= np.sum(probs)
         return probs.astype(np.float32)
-
-# res = requests.get("http://10.42.22.29:8000/healthz")
-# print(res)
