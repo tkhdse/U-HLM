@@ -2,6 +2,7 @@ from server import uhlm_pb2, uhlm_pb2_grpc
 import asyncio
 import grpc
 import numpy as np
+from transformers import AutoTokenizer  # Add this import
 
 
 async def query(prompt: str, max_tokens: int = 20):
@@ -9,6 +10,9 @@ async def query(prompt: str, max_tokens: int = 20):
     channel = grpc.aio.insecure_channel("localhost:8081")
     stub = uhlm_pb2_grpc.UHLMStub(channel)
     
+    tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+    print("Loaded model...")
+
     try:
         # Begin
         session_id = (await stub.BeginSession(uhlm_pb2.BeginReq(prompt=prompt))).session_id
@@ -29,7 +33,9 @@ async def query(prompt: str, max_tokens: int = 20):
                 break
         
         await stub.EndSession(uhlm_pb2.EndReq(session_id=session_id))
-        return tokens
+        
+        decoded_text = tokenizer.decode(tokens)
+        return tokens, decoded_text
         
     finally:
         await channel.close()
@@ -37,5 +43,7 @@ async def query(prompt: str, max_tokens: int = 20):
 
 if __name__ == "__main__":
     prompt = "What is the capital of France?"
-    tokens = asyncio.run(query(prompt))
-    print(f"\nGenerated tokens: {tokens}")
+    tokens, decoded = asyncio.run(query(prompt))
+    print(f"\nPrompt: {prompt}")
+    print(f"Generated tokens: {tokens}")
+    print(f"Decoded output: {decoded}")
