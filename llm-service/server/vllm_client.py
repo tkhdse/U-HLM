@@ -52,18 +52,14 @@ class VLLMClient:
                 break
 
 
-        print("output: ", final_output)
-
         # Extract logits and convert to probabilities
+        logits = None
         if final_output and final_output.outputs:
-                # Access the custom logits tensor (Requires your custom vLLM build)
-                raw_logits = final_output.outputs[0].logits_tensor 
-                verified_text = final_output.outputs[0].text
-
-                print(raw_logits)
-                print(verified_text)
+            logits = final_output.outputs[0].logprobs
+            print(logits)
 
 
         probs = np.exp(logits - np.max(logits))
         probs /= np.sum(probs)
+        print(probs)
         return probs.astype(np.float32)

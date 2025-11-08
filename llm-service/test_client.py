@@ -36,6 +36,6 @@ async def query(prompt: str, max_tokens: int = 20):
 
 
 if __name__ == "__main__":
-    prompt = input("Enter your query: ") if len(__import__('sys').argv) == 1 else __import__('sys').argv[1]
+    prompt = "What is the capital of France?"
     tokens = asyncio.run(query(prompt))
     print(f"\nGenerated tokens: {tokens}")
