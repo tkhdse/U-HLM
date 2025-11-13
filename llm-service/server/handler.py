@@ -2,7 +2,7 @@ import numpy as np
 from . import verifier
 from .vllm_client import VLLMClient
 from .session_manager import SessionManager
-from . import uhlm_pb2, uhlm_pb2_grpc
+from common.uhlm import uhlm_pb2, uhlm_pb2_grpc
 
 class UHLMService(uhlm_pb2_grpc.UHLMServicer):
     def __init__(self, model_id):

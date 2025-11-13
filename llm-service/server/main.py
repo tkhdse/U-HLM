@@ -2,7 +2,7 @@ import asyncio
 import grpc
 from grpc_reflection.v1alpha import reflection
 
-from . import uhlm_pb2, uhlm_pb2_grpc
+from common.uhlm import uhlm_pb2, uhlm_pb2_grpc
 from .handler import UHLMService
 
 async def serve():
