@@ -5,20 +5,21 @@ import numpy as np
 from transformers import AutoTokenizer  # Add this import
 
 
+# test_client.py
 async def query(prompt: str, max_tokens: int = 20):
-    """Send a prompt, get token IDs back"""
     channel = grpc.aio.insecure_channel("localhost:8081")
     stub = uhlm_pb2_grpc.UHLMStub(channel)
     
     tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
-    print("Loaded model...")
-
+    
     try:
-        # Begin
         session_id = (await stub.BeginSession(uhlm_pb2.BeginReq(prompt=prompt))).session_id
         
+        # Get prompt token IDs
+        prompt_token_ids = tokenizer.encode(prompt, add_special_tokens=False)
+        all_tokens = prompt_token_ids.copy()  # Start with prompt tokens
+        
         # Generate
-        tokens = []
         for _ in range(max_tokens):
             resp = await stub.VerifyToken(uhlm_pb2.VerifyReq(
                 session_id=session_id,
@@ -28,14 +29,19 @@ async def query(prompt: str, max_tokens: int = 20):
                     probs=[0.1] * 10
                 )
             ))
-            tokens.append(resp.token_id)
-            if resp.token_id == 2:  # EOS
+            all_tokens.append(resp.token_id)  # Append to full sequence
+            if resp.token_id == tokenizer.eos_token_id:  # Use proper EOS token
                 break
         
         await stub.EndSession(uhlm_pb2.EndReq(session_id=session_id))
         
-        decoded_text = tokenizer.decode(tokens)
-        return tokens, decoded_text
+        # Decode full sequence (prompt + generated)
+        decoded_text = tokenizer.decode(all_tokens, skip_special_tokens=True)
+        # Or decode just the generated part
+        generated_tokens = all_tokens[len(prompt_token_ids):]
+        generated_text = tokenizer.decode(generated_tokens, skip_special_tokens=True)
+        
+        return all_tokens, decoded_text, generated_text
         
     finally:
         await channel.close()
@@ -43,7 +49,8 @@ async def query(prompt: str, max_tokens: int = 20):
 
 if __name__ == "__main__":
     prompt = "What is the capital of France?"
-    tokens, decoded = asyncio.run(query(prompt))
+    tokens, decoded, generated = asyncio.run(query(prompt))
     print(f"\nPrompt: {prompt}")
     print(f"Generated tokens: {tokens}")
     print(f"Decoded output: {decoded}")
+    print(f"Generated output: {generated}")
