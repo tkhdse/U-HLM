@@ -17,9 +17,9 @@ import utils
 from transformers import AutoTokenizer
 
 
-model, _ = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
+model, tokenizer = utils.setup("TinyLlama/TinyLlama-1.1B-Chat-v1.0") # meta-llama/Llama-3.2-1B-Instruct
 model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+# tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
 
 async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     """Generate a complete response using U-HLM with gRPC LLM verification."""
@@ -170,9 +170,9 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
 
 # Main inference loop
 while True:
-    prompt = input("\nEnter prompt (or 'quit' to exit): ").strip()
+    prompt = input("\nEnter prompt (or 'q'/'quit' to exit): ").strip()
     
-    if prompt.lower() == 'quit':
+    if prompt.lower() == 'quit' or prompt.lower() == 'q':
         break
     
     if not prompt:
