@@ -12,6 +12,13 @@ def setup(model_name="meta-llama/Llama-3.2-1B-Instruct", dtype=torch.float16):
 
     # Load the SLM (e.g. Llama 3.2 1B Instruct)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    if tokenizer.eos_token_id is None:
+        tokenizer.eos_token = tokenizer.pad_token or "</s>"
+
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         dtype=dtype,       # or bfloat16/8bit/4bit for on-device
