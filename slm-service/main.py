@@ -14,9 +14,12 @@ from rpc_client import LLMRPCClient
 import asyncio
 import utils
 
+from transformers import AutoTokenizer
 
-model, tokenizer = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
+
+model, _ = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
 model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
 
 async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     """Generate a complete response using U-HLM with gRPC LLM verification."""

@@ -9,6 +9,7 @@ if str(repo_root) not in sys.path:
 
 import grpc
 from common.uhlm import uhlm_pb2, uhlm_pb2_grpc # adjust import path
+import numpy as np
 
 class LLMRPCClient:
     def __init__(self, host="127.0.0.1", port=8081):
