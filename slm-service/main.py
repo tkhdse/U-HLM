@@ -1,8 +1,22 @@
+import sys
+from pathlib import Path
+
+# Add repository root to Python path
+repo_root = Path(__file__).resolve().parents[1]  # slm-service -> U-HLM
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
+
 import torch
 import numpy as np
 import threshold_calc
 import speculate
 from rpc_client import LLMRPCClient
+import asyncio
+import utils
+
+
+model, tokenizer = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
+model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 
 async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     """Generate a complete response using U-HLM with gRPC LLM verification."""
@@ -162,7 +176,7 @@ while True:
         continue
         
     try:
-        aynscio.run(generate_response(prompt)) # turned into asyncio call
+        asyncio.run(generate_response(prompt)) # turned into asyncio call
     except Exception as e:
         print(f"Error generating response: {e}")
         continue

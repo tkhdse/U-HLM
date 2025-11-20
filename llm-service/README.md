@@ -16,6 +16,7 @@ pip install -r requirements.txt
 2. Run gRPC server:
 ```
 # run as a module
+export PYTHONPATH="/path-to/U-HLM" # allows code to read from /common/ (RPC def)
 python3 -m server.main
 
 ```
