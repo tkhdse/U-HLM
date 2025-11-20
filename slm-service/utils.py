@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-def setup(model_name="meta-llama/Llama-3.2-1B-Instruct", dtype=torch.float16):
+def setup(model_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0", dtype=torch.float16):
     # load .env
     # load_dotenv()
     # hf_token = os.getenv("HUGGINGFACE_HUB_TOKEN") # create .env file with your own token

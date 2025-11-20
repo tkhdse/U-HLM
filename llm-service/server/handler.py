@@ -31,8 +31,8 @@ class UHLMService(uhlm_pb2_grpc.UHLMServicer):
             x = np.zeros_like(y)
             for idx, p in zip(request.sparse.indices, request.sparse.probs):
                 x[idx] = p
-        
-        accepted, token_id = verifier.accept_or_resample(request.draft_id, x, y)
+        eos_token_id = self.llm.tokenizer.eos_token_id
+        accepted, token_id = verifier.accept_or_resample(request.draft_id, x, y, eos_token_id)
         # Store actual token ID (integer)
         self.sessions.append(request.session_id, token_id)
         
@@ -43,7 +43,8 @@ class UHLMService(uhlm_pb2_grpc.UHLMServicer):
         )
 
     async def Sync(self, request, context):
-        self.sessions.sync_tail(request.session_id, [f"<tok{i}>" for i in request.tail_ids])
+        # self.sessions.sync_tail(request.session_id, [f"<tok{i}>" for i in request.tail_ids])
+        self.sessions.sync_tail(request.session_id, list(request.tail_ids))
         length = self.sessions.sessions[request.session_id]["length"]
         return uhlm_pb2.SyncResp(new_length=length)
 

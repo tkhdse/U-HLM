@@ -68,6 +68,7 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
                     accepted = True
                     final_token_id = base_draft_id
                     decision = "SKIPPED"
+                    await llm.sync(session_id, [final_token_id])
 
                 # 5. Append token and keep session text in sync
                 current_token_ids.append(final_token_id)

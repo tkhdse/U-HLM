@@ -49,18 +49,11 @@ class LLMRPCClient:
         )
         return resp.accepted, resp.token_id, resp.new_length
 
-    # async def verify(self, session_id, draft_id, probs):
-    #     sparse_indices, sparse_probs = zip(*[(i, p) for i, p in enumerate(probs) if p > 1e-6])
-    #     sparse = uhlm_pb2.SparseTopK(
-    #         indices=sparse_indices,
-    #         probs=sparse_probs,
-    #     )
-    #     resp = await self.stub.VerifyToken(
-    #         uhlm_pb2.VerifyReq(session_id=session_id,
-    #                            draft_id=draft_id,
-    #                            sparse=sparse)
-    #     )
-    #     return resp.accepted, resp.token_id, resp.new_length
+    async def sync(self, session_id, tail_ids):
+        resp = await self.stub.Sync(
+            uhlm_pb2.SyncReq(session_id=session_id, tail_ids=[int(t) for t in tail_ids])
+        )
+        return resp.new_length
 
     async def end_session(self, session_id):
         await self.stub.EndSession(uhlm_pb2.EndReq(session_id=session_id))
