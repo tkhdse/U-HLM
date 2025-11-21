@@ -76,6 +76,8 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
 
                 # 6. Log the choice
                 token_text = tokenizer.decode([final_token_id], skip_special_tokens=True).strip()
+                if final_token_id == tokenizer.eos_token_id:
+                    print(f"[SLM DEBUG] Generated EOS token: final_token_id={final_token_id}, SLM eos_token_id={tokenizer.eos_token_id}")
                 print(
                     f"Token {step+1:>3}: [{decision}] "
                     f"uncertainty={u_t:.3f} vs threshold={u_th:.3f} "

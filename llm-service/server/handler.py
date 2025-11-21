@@ -32,6 +32,8 @@ class UHLMService(uhlm_pb2_grpc.UHLMServicer):
             for idx, p in zip(request.sparse.indices, request.sparse.probs):
                 x[idx] = p
         eos_token_id = self.llm.tokenizer.eos_token_id
+        if request.draft_id == eos_token_id:
+            print(f"[HANDLER DEBUG] Verifying EOS token: draft_id={request.draft_id}, LLM eos_token_id={eos_token_id}")
         accepted, token_id = verifier.accept_or_resample(request.draft_id, x, y, eos_token_id)
         # Store actual token ID (integer)
         self.sessions.append(request.session_id, token_id)
