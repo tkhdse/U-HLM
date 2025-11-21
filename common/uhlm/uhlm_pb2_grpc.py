@@ -3,6 +3,7 @@
 import grpc
 import warnings
 
+# import uhlm_pb2 as uhlm__pb2
 from . import uhlm_pb2 as uhlm__pb2
 
 GRPC_GENERATED_VERSION = '1.76.0'
