@@ -26,8 +26,17 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     print(f"\nGenerating response for: '{prompt}'")
     print("-" * 60)
 
+    # Format prompt for chat model if tokenizer has chat template
+    if hasattr(tokenizer, 'apply_chat_template') and tokenizer.chat_template:
+        messages = [{"role": "user", "content": prompt}]
+        formatted_prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        print(f"Using chat template. Formatted prompt: {repr(formatted_prompt)}")
+    else:
+        formatted_prompt = prompt
+        print("No chat template found, using raw prompt")
+
     # Tokenize prompt and remove EOS tokens
-    current_token_ids = tokenizer.encode(prompt, add_special_tokens=False)
+    current_token_ids = tokenizer.encode(formatted_prompt, add_special_tokens=False)
     slm_eos_id = tokenizer.eos_token_id
     print(slm_eos_id)
     current_token_ids = [t for t in current_token_ids if t != slm_eos_id]
@@ -41,8 +50,8 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     skipped_count = 0
 
     async with LLMRPCClient(host="127.0.0.1", port=8081) as llm:
-        # Get session ID and LLM's EOS token ID
-        session_id, llm_eos_token_id = await llm.begin_session(prompt)
+        # Get session ID and LLM's EOS token ID (use formatted prompt for both SLM and LLM)
+        session_id, llm_eos_token_id = await llm.begin_session(formatted_prompt)
         print(f"LLM EOS token ID: {llm_eos_token_id}")
 
         try:
@@ -82,12 +91,12 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
                 if decision == "TRANSMITTED":
                     # Token came from LLM, use LLM's EOS token ID
                     if int(final_token_id) == int(llm_eos_token_id):
-                        print("Hit LLM EOS token; stopping generation.")
+                        print(f"Hit LLM EOS token (id={final_token_id}); stopping generation.")
                         break
                 else:
                     # Token came from SLM, use SLM's EOS token ID
                     if int(final_token_id) == int(slm_eos_id):
-                        print("Hit SLM EOS token; stopping generation.")
+                        print(f"Hit SLM EOS token (id={final_token_id}); stopping generation.")
                         break
 
                 # 6. Append token (only if not EOS)
@@ -112,7 +121,7 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     # 9. Decode and report statistics
     decoded = tokenizer.decode(response_token_ids, skip_special_tokens=True)
     total = len(response_token_ids) or 1
-    print(f"\nComplete Response for {prompt}")
+    print(f"\nComplete Response:")
     print(decoded if decoded.strip() else "<empty>")
     print(
         f"\nStats: transmitted={transmitted_count}, skipped={skipped_count}, "
