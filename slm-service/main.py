@@ -17,7 +17,12 @@ import utils
 from transformers import AutoTokenizer
 
 
-model, tokenizer = utils.setup("TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T") # Base model (non-chat)
+# IMPORTANT: SLM and LLM must use compatible tokenizers!
+# Current setup: Llama 2 family (TinyLlama uses Llama 2 tokenizer)
+# SLM: TinyLlama, LLM: Llama-2-7b-hf ✅ Compatible
+
+# For Q&A with base models, use Q: A: formatting
+model, tokenizer = utils.setup("TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T")
 # Alternative chat model option: meta-llama/Llama-3.2-1B-Instruct
 model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
@@ -33,8 +38,13 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
         formatted_prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         print(f"Using chat template. Formatted prompt: {repr(formatted_prompt)}")
     else:
-        formatted_prompt = prompt
-        print("Using raw prompt (chat template disabled or not available)")
+        # For base models: format questions as Q: A: for better completion
+        if prompt.strip().endswith('?'):
+            formatted_prompt = f"Q: {prompt}\nA:"
+            print(f"Base model Q&A format: {repr(formatted_prompt)}")
+        else:
+            formatted_prompt = prompt
+            print("Using raw prompt")
 
     # Tokenize prompt and remove EOS tokens
     current_token_ids = tokenizer.encode(formatted_prompt, add_special_tokens=False)
