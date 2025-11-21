@@ -98,10 +98,11 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
                 token_text = tokenizer.decode([final_token_id], skip_special_tokens=True).strip()
                 if final_token_id == tokenizer.eos_token_id:
                     print(f"[SLM DEBUG] Generated EOS token: final_token_id={final_token_id}, SLM eos_token_id={tokenizer.eos_token_id}")
+                display_text = token_text if token_text else f'<EOS or empty, id={final_token_id}>'
                 print(
                     f"Token {step+1:>3}: [{decision}] "
                     f"uncertainty={u_t:.3f} vs threshold={u_th:.3f} "
-                    f"accepted={accepted} -> '{token_text or '<EOS>'}'"
+                    f"accepted={accepted} -> '{display_text}'"
                 )
 
         finally:
