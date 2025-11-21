@@ -2,6 +2,8 @@ import requests
 import json
 import torch
 import torch.nn.functional as F
+import asyncio
+from rpc_client import LLMRPCClient
 
 def sample_draft_tokens(model, context, K=20, theta_max=2.0, device="cuda"):
     """
@@ -42,15 +44,25 @@ def sample_draft_tokens(model, context, K=20, theta_max=2.0, device="cuda"):
         "thetas": thetas
     }
 
-def adaptive_offload(u_t, prompt, result):
-    payload = {
-        "prompt": prompt,
-        "draft_token_id": result["base_draft_id"],
-        "probs": result["base_probs"].tolist(),
-        "uncertainty": u_t,
-    }
-    response = requests.post("http://<server-ip>:8080/verify", json=payload)
-    r = response.json()
-    final_token_id = r["final_token"]
+# def adaptive_offload(u_t, prompt, result):
+#     payload = {
+#         "prompt": prompt,
+#         "draft_token_id": result["base_draft_id"],
+#         "probs": result["base_probs"].tolist(),
+#         "uncertainty": u_t,
+#     }
+#     response = requests.post("http://<server-ip>:8080/verify", json=payload)
+#     r = response.json()
+#     final_token_id = r["final_token"]
 
-    return final_token_id, final_token_id == result["base_draft_id"]
+#     return final_token_id, final_token_id == result["base_draft_id"]
+
+
+async def adaptive_offload(prompt, session_id, draft_id, probs):
+    async with LLMRPCClient() as llm:
+        accepted, token_id, new_length = await llm.verify(
+            session_id=session_id,
+            draft_id=draft_id,
+            probs=probs
+        )
+        return token_id, accepted
