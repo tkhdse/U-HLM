@@ -9,6 +9,7 @@ def accept_or_resample(draft_id, x, y, eos_token_id=None):
     x_d, y_d = x[draft_id], y[draft_id]
     if eos_token_id is not None and draft_id == eos_token_id:
         return True, draft_id
+
     if x_d <= y_d:
         return True, draft_id
 
