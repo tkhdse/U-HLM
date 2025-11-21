@@ -29,6 +29,7 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     # Tokenize prompt and remove EOS tokens
     current_token_ids = tokenizer.encode(prompt, add_special_tokens=False)
     slm_eos_id = tokenizer.eos_token_id
+    print(slm_eos_id)
     current_token_ids = [t for t in current_token_ids if t != slm_eos_id]
     
     if not current_token_ids:
@@ -80,12 +81,12 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
                 # 5. Check EOS BEFORE appending (use LLM's EOS for transmitted, SLM's for skipped)
                 if decision == "TRANSMITTED":
                     # Token came from LLM, use LLM's EOS token ID
-                    if final_token_id == llm_eos_token_id:
+                    if int(final_token_id) == int(llm_eos_token_id):
                         print("Hit LLM EOS token; stopping generation.")
                         break
                 else:
                     # Token came from SLM, use SLM's EOS token ID
-                    if final_token_id == slm_eos_id:
+                    if int(final_token_id) == int(slm_eos_id):
                         print("Hit SLM EOS token; stopping generation.")
                         break
 
@@ -108,7 +109,7 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     # 9. Decode and report statistics
     decoded = tokenizer.decode(response_token_ids, skip_special_tokens=True)
     total = len(response_token_ids) or 1
-    print("\nComplete Response:")
+    print(f"\nComplete Response for {prompt}")
     print(decoded if decoded.strip() else "<empty>")
     print(
         f"\nStats: transmitted={transmitted_count}, skipped={skipped_count}, "
