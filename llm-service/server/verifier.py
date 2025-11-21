@@ -7,9 +7,10 @@ def accept_or_resample(draft_id, x, y, eos_token_id=None):
     returns (accepted, token_id)
     """
     x_d, y_d = x[draft_id], y[draft_id]
-    # if eos_token_id is not None and draft_id == eos_token_id:
-    #     return True, draft_id
-
+    if eos_token_id is not None and draft_id == eos_token_id:
+        print(f"[VERIFIER DEBUG] Force-accepting EOS token: draft_id={draft_id}, eos_token_id={eos_token_id}")
+        return True, draft_id
+    print(f"[VERIFIER DEBUG] Non-EOS token: draft_id={draft_id}, eos_token_id={eos_token_id}, x_d={x_d:.4f}, y_d={y_d:.4f}")
     if x_d <= y_d:
         return True, draft_id
 
