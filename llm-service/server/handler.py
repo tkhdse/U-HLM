@@ -18,7 +18,8 @@ class UHLMService(uhlm_pb2_grpc.UHLMServicer):
 
     async def BeginSession(self, request, context):
         sid, pos = self.sessions.begin(request.prompt)
-        return uhlm_pb2.BeginResp(session_id=sid, position=pos)
+        eos_token_id = self.llm.tokenizer.eos_token_id or 0
+        return uhlm_pb2.BeginResp(session_id=sid, position=pos, eos_token_id=eos_token_id)
 
     async def VerifyToken(self, request, context):
         # This now gets properly tokenized text

@@ -20,6 +20,7 @@ message BeginReq {
 message BeginResp {
   string session_id = 1;
   uint32 position   = 2;
+  uint32 eos_token_id = 3;
 }
 
 message Dense {

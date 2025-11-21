@@ -26,16 +26,24 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
     print(f"\nGenerating response for: '{prompt}'")
     print("-" * 60)
 
-    # Tokenize prompt once
+    # Tokenize prompt and remove EOS tokens
     current_token_ids = tokenizer.encode(prompt, add_special_tokens=False)
+    slm_eos_id = tokenizer.eos_token_id
+    print(slm_eos_id)
+    current_token_ids = [t for t in current_token_ids if t != slm_eos_id]
+    
+    if not current_token_ids:
+        print("Prompt contains only EOS tokens, stopping.")
+        return "", {"transmitted": 0, "skipped": 0, "total": 0, "transmission_rate": 0.0}
+    
     response_token_ids = []
-
     transmitted_count = 0
     skipped_count = 0
 
     async with LLMRPCClient(host="127.0.0.1", port=8081) as llm:
-        # 1. Start a session on the LLM service
-        session_id = await llm.begin_session(prompt)
+        # Get session ID and LLM's EOS token ID
+        session_id, llm_eos_token_id = await llm.begin_session(prompt)
+        print(f"LLM EOS token ID: {llm_eos_token_id}")
 
         try:
             for step in range(max_tokens):
@@ -70,11 +78,23 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
                     decision = "SKIPPED"
                     await llm.sync(session_id, [final_token_id])
 
-                # 5. Append token and keep session text in sync
+                # 5. Check EOS BEFORE appending (use LLM's EOS for transmitted, SLM's for skipped)
+                if decision == "TRANSMITTED":
+                    # Token came from LLM, use LLM's EOS token ID
+                    if int(final_token_id) == int(llm_eos_token_id):
+                        print("Hit LLM EOS token; stopping generation.")
+                        break
+                else:
+                    # Token came from SLM, use SLM's EOS token ID
+                    if int(final_token_id) == int(slm_eos_id):
+                        print("Hit SLM EOS token; stopping generation.")
+                        break
+
+                # 6. Append token (only if not EOS)
                 current_token_ids.append(final_token_id)
                 response_token_ids.append(final_token_id)
 
-                # 6. Log the choice
+                # 7. Log the choice
                 token_text = tokenizer.decode([final_token_id], skip_special_tokens=True).strip()
                 if final_token_id == tokenizer.eos_token_id:
                     print(f"[SLM DEBUG] Generated EOS token: final_token_id={final_token_id}, SLM eos_token_id={tokenizer.eos_token_id}")
@@ -84,18 +104,14 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
                     f"accepted={accepted} -> '{token_text or '<EOS>'}'"
                 )
 
-                if final_token_id == tokenizer.eos_token_id:
-                    print("Hit EOS token; stopping generation.")
-                    break
-
         finally:
-            # 7. Cleanly close the session
+            # 8. Cleanly close the session
             await llm.end_session(session_id)
 
-    # 8. Decode and report statistics
+    # 9. Decode and report statistics
     decoded = tokenizer.decode(response_token_ids, skip_special_tokens=True)
     total = len(response_token_ids) or 1
-    print("\nComplete Response:")
+    print(f"\nComplete Response for {prompt}")
     print(decoded if decoded.strip() else "<empty>")
     print(
         f"\nStats: transmitted={transmitted_count}, skipped={skipped_count}, "
@@ -109,67 +125,6 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0):
         "transmission_rate": transmitted_count / total if total else 0.0,
     }
 
-# import speculate
-# import utils
-# import threshold_calc
-# import torch
-
-# # setup model
-# model, tokenizer = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
-
-# def generate_response(prompt, max_tokens=50):
-#     """Generate a complete response using U-HLM inference"""
-#     print(f"\nGenerating response for: '{prompt}'")
-#     print("-" * 50)
-    
-#     # Start with the prompt tokens
-#     current_tokens = tokenizer.encode(prompt)
-#     response_tokens = []
-#     transmitted_count = 0
-#     skipped_count = 0
-    
-#     for i in range(max_tokens):
-#         # Convert current tokens to tensor for model input
-#         inputs = torch.tensor([current_tokens]).to(model.device)
-        
-#         # Get next token using SLM
-#         result = speculate.sample_draft_tokens(model, inputs, K=20, theta_max=2.0, device="cpu")
-#         sampled_ids = result["sampled_ids"]
-#         base_draft_id = result["base_draft_id"]
-        
-#         # Calculate uncertainty
-#         u_t = sum(d_k != base_draft_id for d_k in sampled_ids) / len(sampled_ids)
-#         u_th = threshold_calc.get_threshold()
-        
-#         # Decide whether to transmit or skip
-#         if u_t > u_th:
-#             # High uncertainty - send to LLM
-#             final_token_id, was_accepted = speculate.adaptive_offload(u_t, prompt, result)
-#             transmitted_count += 1
-#             print(f"Token {i+1}: [TRANSMITTED] uncertainty={u_t:.3f} > {u_th:.3f}")
-#         else:
-#             # Low uncertainty - use SLM's guess
-#             final_token_id = base_draft_id
-#             skipped_count += 1
-#             token_text = tokenizer.decode([final_token_id])
-#             print(f"Token {i+1}: [SKIPPED] uncertainty={u_t:.3f} <= {u_th:.3f} -> '{token_text}'")
-        
-#         # Add token to response
-#         response_tokens.append(final_token_id)
-#         current_tokens.append(final_token_id)
-        
-#         # Stop if we hit an end token
-#         if final_token_id == tokenizer.eos_token_id:
-#             print(f"Hit EOS token, stopping generation")
-#             break
-    
-#     # Decode the complete response
-#     full_response = tokenizer.decode(response_tokens)
-#     print(f"\nComplete Response: {full_response}")
-#     print(f"Stats: {transmitted_count} transmitted, {skipped_count} skipped, {len(response_tokens)} total tokens")
-#     print(f"Transmission Rate: {(transmitted_count/len(response_tokens)*100):.1f}%")
-    
-#     return full_response
 
 # Main inference loop
 while True:

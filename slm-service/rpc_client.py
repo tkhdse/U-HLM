@@ -24,7 +24,7 @@ class LLMRPCClient:
 
     async def begin_session(self, prompt):
         resp = await self.stub.BeginSession(uhlm_pb2.BeginReq(prompt=prompt))
-        return resp.session_id
+        return resp.session_id, resp.eos_token_id
 
 
     async def verify(self, session_id, draft_id, probs):
