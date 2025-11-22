@@ -1,8 +1,9 @@
-
-
-
+Run the SLM-service: 
 
 ```
-export PYTHONPATH="/path-to/U-HLM" # allows code to read from /common/ (RPC def)
-python3 main.py
+python3 -m venv venv
+pip3 -r requirements.txt
+
+# run script (connects to localhost LLM)
+python3 main.py  # to simulate latency, add the --latency flag
 ```

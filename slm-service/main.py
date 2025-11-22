@@ -33,7 +33,7 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     print(f"\nGenerating response for: '{prompt}'")
     print("-" * 60)
 
-    if simulate_latency:
+    if simulate_network:
         print("⚠️  Network latency simulation enabled (50ms per RPC call)")
 
     # Format prompt for chat model if enabled and tokenizer has chat template
@@ -64,7 +64,7 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     transmitted_count = 0
     skipped_count = 0
 
-    async with LLMRPCClient(host="127.0.0.1", port=8081, simulate_latency=simulate_latency) as llm:
+    async with LLMRPCClient(host="127.0.0.1", port=8081, simulate_latency=simulate_network) as llm:
         # Get session ID and LLM's EOS token ID (use formatted prompt for both SLM and LLM)
         session_id, llm_eos_token_id = await llm.begin_session(formatted_prompt)
         print(f"LLM EOS token ID: {llm_eos_token_id}")
