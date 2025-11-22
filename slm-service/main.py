@@ -13,6 +13,7 @@ import speculate
 from rpc_client import LLMRPCClient
 import asyncio
 import utils
+import argparse
 
 from transformers import AutoTokenizer
 
@@ -27,10 +28,13 @@ model, tokenizer = utils.setup("TinyLlama/TinyLlama-1.1B-intermediate-step-1431k
 model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
 
-async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat_template=False):
+async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat_template=False, simulate_network=False):
     """Generate a complete response using U-HLM with gRPC LLM verification."""
     print(f"\nGenerating response for: '{prompt}'")
     print("-" * 60)
+
+    if simulate_network:
+        print("⚠️  Network latency simulation enabled (50ms per RPC call)")
 
     # Format prompt for chat model if enabled and tokenizer has chat template
     if use_chat_template and hasattr(tokenizer, 'apply_chat_template') and tokenizer.chat_template:
@@ -49,7 +53,6 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     # Tokenize prompt and remove EOS tokens
     current_token_ids = tokenizer.encode(formatted_prompt, add_special_tokens=False)
     slm_eos_id = tokenizer.eos_token_id
-    print(slm_eos_id)
     current_token_ids = [t for t in current_token_ids if t != slm_eos_id]
     
     if not current_token_ids:
@@ -60,10 +63,11 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     transmitted_count = 0
     skipped_count = 0
 
-    async with LLMRPCClient(host="127.0.0.1", port=8081) as llm:
+    async with LLMRPCClient(host="127.0.0.1", port=8081, simulate_latency=simulate_network) as llm:
         # Get session ID and LLM's EOS token ID (use formatted prompt for both SLM and LLM)
         session_id, llm_eos_token_id = await llm.begin_session(formatted_prompt)
         print(f"LLM EOS token ID: {llm_eos_token_id}")
+        print(f"SLM EOS token ID: {slm_eos_id}")
 
         try:
             for step in range(max_tokens):
@@ -147,18 +151,31 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     }
 
 
-# Main inference loop
-while True:
-    prompt = input("\nEnter prompt (or 'q'/'quit' to exit): ").strip()
-    
-    if prompt.lower() == 'quit' or prompt.lower() == 'q':
-        break
-    
-    if not prompt:
-        continue
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='U-HLM: Uncertainty-Aware Hybrid Language Model Inference')
+parser.add_argument('--latency', '--simulate-latency', action='store_true',
+                    help='Simulate 50ms network latency for RPC calls (default: False)')
+parser.add_argument('--use-chat-template', action='store_true',
+                    help='Use chat template formatting for prompts (default: False)')
+args = parser.parse_args()
+
+def main():
+    """Main inference loop"""
         
-    try:
-        asyncio.run(generate_response(prompt)) # turned into asyncio call
-    except Exception as e:
-        print(f"Error generating response: {e}")
-        continue
+    while True:
+        prompt = input("\nEnter prompt (or 'q'/'quit' to exit): ").strip()
+        
+        if prompt.lower() == 'quit' or prompt.lower() == 'q':
+            break
+        
+        if not prompt:
+            continue
+            
+        try:
+            asyncio.run(generate_response(prompt, use_chat_template=args.use_chat_template, simulate_network=args.latency))
+        except Exception as e:
+            print(f"Error generating response: {e}")
+            continue
+
+if __name__ == "__main__":
+    main()
