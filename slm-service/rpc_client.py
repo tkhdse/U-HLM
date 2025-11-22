@@ -16,6 +16,7 @@ class LLMRPCClient:
     def __init__(self, host="127.0.0.1", port=8081, simulate_latency=False, latency_ms=50):
         self.channel = grpc.aio.insecure_channel(f"{host}:{port}")
         self.stub = uhlm_pb2_grpc.UHLMStub(self.channel)
+        self.simulate_latency = simulate_latency
         self.latency_seconds = latency_ms / 1000.0
 
     async def __aenter__(self):
