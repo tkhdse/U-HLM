@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuhlm.proto\x12\x04uhlm\"\x1a\n\x08\x42\x65ginReq\x12\x0e\n\x06prompt\x18\x01 \x01(\t\"G\n\tBeginResp\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x10\n\x08position\x18\x02 \x01(\r\x12\x14\n\x0c\x65os_token_id\x18\x03 \x01(\r\"\x16\n\x05\x44\x65nse\x12\r\n\x05probs\x18\x01 \x03(\x02\",\n\nSparseTopK\x12\x0f\n\x07indices\x18\x01 \x03(\r\x12\r\n\x05probs\x18\x02 \x03(\x02\"\x80\x01\n\tVerifyReq\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x10\n\x08\x64raft_id\x18\x02 \x01(\r\x12\x1c\n\x05\x64\x65nse\x18\x03 \x01(\x0b\x32\x0b.uhlm.DenseH\x00\x12\"\n\x06sparse\x18\x04 \x01(\x0b\x32\x10.uhlm.SparseTopKH\x00\x42\x0b\n\tslm_probs\"D\n\nVerifyResp\x12\x10\n\x08\x61\x63\x63\x65pted\x18\x01 \x01(\x08\x12\x10\n\x08token_id\x18\x02 \x01(\r\x12\x12\n\nnew_length\x18\x03 \x01(\r\"/\n\x07SyncReq\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x10\n\x08tail_ids\x18\x02 \x03(\r\"\x1e\n\x08SyncResp\x12\x12\n\nnew_length\x18\x01 \x01(\r\"\x1c\n\x06\x45ndReq\x12\x12\n\nsession_id\x18\x01 \x01(\t\"\x1a\n\x07\x45ndResp\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32\xbb\x01\n\x04UHLM\x12/\n\x0c\x42\x65ginSession\x12\x0e.uhlm.BeginReq\x1a\x0f.uhlm.BeginResp\x12\x30\n\x0bVerifyToken\x12\x0f.uhlm.VerifyReq\x1a\x10.uhlm.VerifyResp\x12%\n\x04Sync\x12\r.uhlm.SyncReq\x1a\x0e.uhlm.SyncResp\x12)\n\nEndSession\x12\x0c.uhlm.EndReq\x1a\r.uhlm.EndRespb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuhlm.proto\x12\x04uhlm\"\x1a\n\x08\x42\x65ginReq\x12\x0e\n\x06prompt\x18\x01 \x01(\t\"G\n\tBeginResp\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x10\n\x08position\x18\x02 \x01(\r\x12\x14\n\x0c\x65os_token_id\x18\x03 \x01(\r\"\x16\n\x05\x44\x65nse\x12\r\n\x05probs\x18\x01 \x03(\x02\",\n\nSparseTopK\x12\x0f\n\x07indices\x18\x01 \x03(\r\x12\r\n\x05probs\x18\x02 \x03(\x02\"\x80\x01\n\tVerifyReq\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x10\n\x08\x64raft_id\x18\x02 \x01(\r\x12\x1c\n\x05\x64\x65nse\x18\x03 \x01(\x0b\x32\x0b.uhlm.DenseH\x00\x12\"\n\x06sparse\x18\x04 \x01(\x0b\x32\x10.uhlm.SparseTopKH\x00\x42\x0b\n\tslm_probs\"p\n\nVerifyResp\x12\x10\n\x08\x61\x63\x63\x65pted\x18\x01 \x01(\x08\x12\x10\n\x08token_id\x18\x02 \x01(\r\x12\x12\n\nnew_length\x18\x03 \x01(\r\x12\x16\n\x0erejection_prob\x18\x04 \x01(\x02\x12\x12\n\ny_d_lt_x_d\x18\x05 \x01(\x08\"/\n\x07SyncReq\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x10\n\x08tail_ids\x18\x02 \x03(\r\"\x1e\n\x08SyncResp\x12\x12\n\nnew_length\x18\x01 \x01(\r\"\x1c\n\x06\x45ndReq\x12\x12\n\nsession_id\x18\x01 \x01(\t\"\x1a\n\x07\x45ndResp\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32\xbb\x01\n\x04UHLM\x12/\n\x0c\x42\x65ginSession\x12\x0e.uhlm.BeginReq\x1a\x0f.uhlm.BeginResp\x12\x30\n\x0bVerifyToken\x12\x0f.uhlm.VerifyReq\x1a\x10.uhlm.VerifyResp\x12%\n\x04Sync\x12\r.uhlm.SyncReq\x1a\x0e.uhlm.SyncResp\x12)\n\nEndSession\x12\x0c.uhlm.EndReq\x1a\r.uhlm.EndRespb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -42,15 +42,15 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_VERIFYREQ']._serialized_start=192
   _globals['_VERIFYREQ']._serialized_end=320
   _globals['_VERIFYRESP']._serialized_start=322
-  _globals['_VERIFYRESP']._serialized_end=390
-  _globals['_SYNCREQ']._serialized_start=392
-  _globals['_SYNCREQ']._serialized_end=439
-  _globals['_SYNCRESP']._serialized_start=441
-  _globals['_SYNCRESP']._serialized_end=471
-  _globals['_ENDREQ']._serialized_start=473
-  _globals['_ENDREQ']._serialized_end=501
-  _globals['_ENDRESP']._serialized_start=503
-  _globals['_ENDRESP']._serialized_end=529
-  _globals['_UHLM']._serialized_start=532
-  _globals['_UHLM']._serialized_end=719
+  _globals['_VERIFYRESP']._serialized_end=434
+  _globals['_SYNCREQ']._serialized_start=436
+  _globals['_SYNCREQ']._serialized_end=483
+  _globals['_SYNCRESP']._serialized_start=485
+  _globals['_SYNCRESP']._serialized_end=515
+  _globals['_ENDREQ']._serialized_start=517
+  _globals['_ENDREQ']._serialized_end=545
+  _globals['_ENDRESP']._serialized_start=547
+  _globals['_ENDRESP']._serialized_end=573
+  _globals['_UHLM']._serialized_start=576
+  _globals['_UHLM']._serialized_end=763
 # @@protoc_insertion_point(module_scope)

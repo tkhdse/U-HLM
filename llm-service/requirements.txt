@@ -1,6 +1,6 @@
 grpcio
 grpcio-tools
-grpcio_reflection
+grpcio-reflection
 httpx
 numpy
 pyyaml

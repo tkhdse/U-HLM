@@ -45,6 +45,9 @@ message VerifyResp {
   bool   accepted   = 1;
   uint32 token_id   = 2;
   uint32 new_length = 3;
+  // Optional stats for data collection (only set when collect_data is enabled)
+  float  rejection_prob = 4;
+  bool   y_d_lt_x_d     = 5;
 }
 
 message SyncReq {
