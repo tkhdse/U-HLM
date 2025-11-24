@@ -11,10 +11,16 @@ from grpc_reflection.v1alpha import reflection
 
 from common.uhlm import uhlm_pb2, uhlm_pb2_grpc
 from .handler import UHLMService
+import argparse
 
-async def serve():
+async def serve(collect_data=False, data_file=None):
     server = grpc.aio.server()
-    uhlm_pb2_grpc.add_UHLMServicer_to_server(UHLMService(model_id="meta-llama/Llama-2-7b-hf"), server)
+    service = UHLMService(
+        model_id="meta-llama/Llama-2-7b-hf",
+        collect_data=collect_data,
+        data_file=data_file
+    )
+    uhlm_pb2_grpc.add_UHLMServicer_to_server(service, server)
     
     SERVICE_NAMES = (
         uhlm_pb2.DESCRIPTOR.services_by_name["UHLM"].full_name,
@@ -28,4 +34,10 @@ async def serve():
     await server.wait_for_termination()
 
 if __name__ == "__main__":
-    asyncio.run(serve())
+    parser = argparse.ArgumentParser(description='U-HLM LLM Service')
+    parser.add_argument('--collect-data', action='store_true',
+                        help='Enable data collection for threshold training')
+    parser.add_argument('--data-file', type=str, default='llm_data.jsonl',
+                        help='File to save collected data (default: llm_data.jsonl)')
+    args = parser.parse_args()
+    asyncio.run(serve(collect_data=args.collect_data, data_file=args.data_file))

@@ -4,11 +4,20 @@ from vllm.engine.arg_utils import EngineArgs
 
 class VLLMClient:
     def __init__(self, model_id="meta-llama/Llama-2-7b-hf", tensor_parallel_size=1):
+        """
+        Initialize vLLM engine.
+        
+        Args:
+            model_id: HuggingFace model identifier
+            tensor_parallel_size: Number of GPUs for tensor parallelism
+        """
         # Initialize vLLM engine
         engine_args = EngineArgs(
             model=model_id,
             tensor_parallel_size=tensor_parallel_size,
             trust_remote_code=True,
+            # gpu_memory_utilization=gpu_memory_utilization,
+            # enforce_eager=enforce_eager,
         )
         self.engine = LLMEngine.from_engine_args(engine_args)
         self.tokenizer = self.engine.tokenizer

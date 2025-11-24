@@ -54,7 +54,10 @@ class LLMRPCClient:
                             draft_id=draft_id,
                             sparse=sparse)
         )
-        return resp.accepted, resp.token_id, resp.new_length
+        # Extract optional stats (will be 0/False if not set)
+        rejection_prob = getattr(resp, 'rejection_prob', 0.0)
+        y_d_lt_x_d = getattr(resp, 'y_d_lt_x_d', False)
+        return resp.accepted, resp.token_id, resp.new_length, rejection_prob, y_d_lt_x_d
 
     async def sync(self, session_id, tail_ids):
         if self.simulate_latency:

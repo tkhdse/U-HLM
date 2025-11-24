@@ -5,3 +5,5 @@ accelerate
 grpcio
 grpcio-tools
 grpcio_reflection
+scikit-learn
+numpy
