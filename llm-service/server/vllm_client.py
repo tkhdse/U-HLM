@@ -16,7 +16,7 @@ class VLLMClient:
             model=model_id,
             tensor_parallel_size=tensor_parallel_size,
             trust_remote_code=True,
-            # gpu_memory_utilization=gpu_memory_utilization,
+            gpu_memory_utilization=0.5,
             # enforce_eager=enforce_eager,
         )
         self.engine = LLMEngine.from_engine_args(engine_args)
