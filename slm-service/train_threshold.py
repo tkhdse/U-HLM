@@ -89,10 +89,15 @@ def calculate_threshold(a, b, delta, mode='risk-prone'):
     return threshold
 
 def main():
+
+    script_dir = Path(__file__).parent
+    default_data_file = script_dir / 'training_data.jsonl'
+    default_output_file = script_dir / 'threshold_model.json'
+
     parser = argparse.ArgumentParser(description='Train threshold model from collected data')
-    parser.add_argument('--data-file', type=str, default='slm-service/training_data.jsonl',
+    parser.add_argument('--data-file', type=str, default=str(default_data_file),
                         help='Path to training data JSONL file')
-    parser.add_argument('--output-file', type=str, default='slm-service/threshold_model.json',
+    parser.add_argument('--output-file', type=str, default=str(default_output_file),
                         help='Path to save model parameters')
     parser.add_argument('--mode', type=str, default='risk-prone', choices=['risk-averse', 'risk-prone'],
                         help='Threshold calculation mode (default: risk-prone)')

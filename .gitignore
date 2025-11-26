@@ -1,3 +1,5 @@
 venv/
 .env
 */__pycache__
+slm-service/training_data.jsonl
+slm-service/threshold_model.json
