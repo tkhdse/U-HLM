@@ -20,14 +20,14 @@ from transformers import AutoTokenizer
 
 
 # IMPORTANT: SLM and LLM must use compatible tokenizers!
-# Current setup: Llama 2 family (TinyLlama uses Llama 2 tokenizer)
-# SLM: TinyLlama, LLM: Llama-2-7b-hf ✅ Compatible
+# Current setup: Llama 3 family
+# SLM: Llama-3.2-1B-Instruct, LLM: Llama-3.1-8B ✅ Compatible
 
 # For Q&A with base models, use Q: A: formatting
-model, tokenizer = utils.setup("TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T")
-# Alternative chat model option: meta-llama/Llama-3.2-1B-Instruct
+model, tokenizer = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
+# Alternative chat model option: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
-# tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+# tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3.1-8B")
 
 async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat_template=False, 
                             simulate_network=False, data_collector=None):

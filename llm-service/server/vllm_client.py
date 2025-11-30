@@ -3,7 +3,7 @@ from vllm import LLMEngine, SamplingParams
 from vllm.engine.arg_utils import EngineArgs
 
 class VLLMClient:
-    def __init__(self, model_id="meta-llama/Llama-2-7b-hf", tensor_parallel_size=1):
+    def __init__(self, model_id="meta-llama/Meta-Llama-3.1-8B", tensor_parallel_size=1):
         """
         Initialize vLLM engine.
         
