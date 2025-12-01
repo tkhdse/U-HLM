@@ -16,7 +16,7 @@ import argparse
 async def serve(collect_data=False, data_file=None):
     server = grpc.aio.server()
     service = UHLMService(
-        model_id="meta-llama/Llama-3.2-3B-Instruct",
+        model_id="meta-llama/Llama-3.1-8B-Instruct",
         collect_data=collect_data,
         data_file=data_file
     )
