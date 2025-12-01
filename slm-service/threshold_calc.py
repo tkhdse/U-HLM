@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 # Default threshold if model not found
-DEFAULT_THRESHOLD = 0.0
+DEFAULT_THRESHOLD = 0.632
 MODEL_FILE = Path(__file__).parent / "threshold_model.json"
 
 def get_threshold(use_default=False):
