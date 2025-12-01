@@ -196,6 +196,20 @@ def main():
 
     args = parser.parse_args()
 
+    # 0. Cleanup old files
+    if not args.skip_collection:
+        # Clear data file if we are running collection
+        data_path = Path(args.data_file)
+        if data_path.exists():
+            print(f"🧹 Clearing old data file: {data_path}")
+            data_path.unlink()
+            
+        # Also clear the model file since we will train a new one
+        model_path = Path(args.output_file)
+        if model_path.exists():
+            print(f"🧹 Clearing old model file: {model_path}")
+            model_path.unlink()
+
     # 1. Data Collection
     if not args.skip_collection:
         prompts = load_prompts(args.prompt_file)
