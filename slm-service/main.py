@@ -21,10 +21,10 @@ from transformers import AutoTokenizer
 
 # IMPORTANT: SLM and LLM must use compatible tokenizers!
 # Current setup: Llama 3 family
-# SLM: Llama-3.2-1B-Instruct, LLM: Llama-3.1-8B ✅ Compatible
+# SLM: Llama-3.2-3B-Instruct, LLM: Llama-3.1-8B (or similar Llama 3.x)
 
 # For Q&A with base models, use Q: A: formatting
-model, tokenizer = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
+model, tokenizer = utils.setup("meta-llama/Llama-3.2-3B-Instruct")
 # Alternative chat model option: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3.1-8B")
