@@ -184,22 +184,24 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     }
 
 
-# Parse command-line arguments
-parser = argparse.ArgumentParser(description='U-HLM: Uncertainty-Aware Hybrid Language Model Inference')
-parser.add_argument('--latency', '--simulate-latency', action='store_true',
-                    help='Simulate 50ms network latency for RPC calls (default: False)')
-parser.add_argument('--use-chat-template', action='store_true',
-                    help='Use chat template formatting for prompts (default: False)')
-parser.add_argument('--collect-data', action='store_true',
-                    help='Collect training data for threshold calculation (sets threshold to 0)')
-parser.add_argument('--data-file', type=str, default=None,
-                    help='File to save training data (default: slm-service/training_data.jsonl)')
-parser.add_argument('--max-tokens', type=int, default=50,
-                    help='Maximum tokens to generate per prompt (default: 50)')
-args = parser.parse_args()
+# Moved argument parsing inside main() to prevent execution on import
 
 def main():
     """Main inference loop"""
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description='U-HLM: Uncertainty-Aware Hybrid Language Model Inference')
+    parser.add_argument('--latency', '--simulate-latency', action='store_true',
+                        help='Simulate 50ms network latency for RPC calls (default: False)')
+    parser.add_argument('--use-chat-template', action='store_true',
+                        help='Use chat template formatting for prompts (default: False)')
+    parser.add_argument('--collect-data', action='store_true',
+                        help='Collect training data for threshold calculation (sets threshold to 0)')
+    parser.add_argument('--data-file', type=str, default=None,
+                        help='File to save training data (default: slm-service/training_data.jsonl)')
+    parser.add_argument('--max-tokens', type=int, default=50,
+                        help='Maximum tokens to generate per prompt (default: 50)')
+    args = parser.parse_args()
+
     data_collector = None
     if args.collect_data:
         data_collector = DataCollector(data_file=args.data_file)
