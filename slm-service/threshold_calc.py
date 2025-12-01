@@ -9,15 +9,15 @@ from pathlib import Path
 DEFAULT_THRESHOLD = 0.0
 MODEL_FILE = Path(__file__).parent / "threshold_model.json"
 
-def get_threshold():
+def get_threshold(use_default=False):
     """
     Get threshold value from trained model.
     
     Returns:
         float: Threshold value for uncertainty comparison
     """
-    if not MODEL_FILE.exists():
-        # Model not trained yet, return default
+    if not MODEL_FILE.exists() or use_default:
+        # Model not trained yet or training a threshold, return default
         return DEFAULT_THRESHOLD
     
     try:
