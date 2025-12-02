@@ -10,6 +10,8 @@ class VLLMClient:
         Args:
             model_id: HuggingFace model identifier
             tensor_parallel_size: Number of GPUs for tensor parallelism
+            # gpu_memory_utilization: Fraction of GPU memory to use (0.7 = 70%)
+            # enforce_eager: Use eager mode (less memory, slightly slower)
         """
         # Initialize vLLM engine
         engine_args = EngineArgs(

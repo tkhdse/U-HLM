@@ -30,7 +30,7 @@ model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
 
 async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat_template=False, 
-                            simulate_network=False, data_collector=None):
+                            simulate_network=False, data_collector=None, host='127.0.0.1', port=8081):
     """Generate a complete response using U-HLM with gRPC LLM verification.
     
     Args:
@@ -73,7 +73,7 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     transmitted_count = 0
     skipped_count = 0
 
-    async with LLMRPCClient(host="127.0.0.1", port=8081, simulate_latency=simulate_network) as llm:
+    async with LLMRPCClient(host=host, port=port, simulate_latency=simulate_network) as llm:
         # Get session ID and LLM's EOS token ID (use formatted prompt for both SLM and LLM)
         session_id, llm_eos_token_id = await llm.begin_session(formatted_prompt)
         print(f"LLM EOS token ID: {llm_eos_token_id}")
@@ -196,6 +196,10 @@ parser.add_argument('--data-file', type=str, default=None,
                     help='File to save training data (default: slm-service/training_data.jsonl)')
 parser.add_argument('--max-tokens', type=int, default=50,
                     help='Maximum tokens to generate per prompt (default: 50)')
+parser.add_argument('--host', type=str, default='127.0.0.1',
+                    help='LLM service host (default: 127.0.0.1, use A100 IP if running on A100)')
+parser.add_argument('--port', type=int, default=8081,
+                    help='LLM service port (default: 8081)')
 args = parser.parse_args()
 
 def main():
@@ -224,7 +228,9 @@ def main():
                 max_tokens=args.max_tokens,
                 use_chat_template=args.use_chat_template, 
                 simulate_network=args.latency,
-                data_collector=data_collector
+                data_collector=data_collector,
+                host=args.host,
+                port=args.port
             ))
             if data_collector:
                 print(f"   Data points so far: {data_collector.get_data_count()}")
