@@ -14,24 +14,34 @@ from rpc_client import LLMRPCClient
 import asyncio
 import utils
 import argparse
+from data_collector import DataCollector
 
 from transformers import AutoTokenizer
 
 
 # IMPORTANT: SLM and LLM must use compatible tokenizers!
-# Current setup: Llama 2 family (TinyLlama uses Llama 2 tokenizer)
-# SLM: TinyLlama, LLM: Llama-2-7b-hf ✅ Compatible
+# Current setup: Llama 3.2 family
+# SLM: Llama-3.2-1B-Instruct, LLM: Llama-3.2-3B-Instruct
 
 # For Q&A with base models, use Q: A: formatting
-model, tokenizer = utils.setup("TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T")
-# Alternative chat model option: meta-llama/Llama-3.2-1B-Instruct
+model, tokenizer = utils.setup("meta-llama/Llama-3.2-1B-Instruct")
+# Alternative chat model option: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 model = model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
-# tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+# tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3.1-8B")
 
-async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat_template=False, simulate_network=False):
-    """Generate a complete response using U-HLM with gRPC LLM verification."""
+async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat_template=False, 
+                            simulate_network=False, data_collector=None):
+    """Generate a complete response using U-HLM with gRPC LLM verification.
+    
+    Args:
+        data_collector: Optional DataCollector instance for training data collection
+    """
     print(f"\nGenerating response for: '{prompt}'")
     print("-" * 60)
+    
+    # When collecting data, force threshold to 0 so all tokens are transmitted
+    if data_collector is not None:
+        print("📊 Data collection mode: threshold set to 0.0 (all tokens transmitted)")
 
     if simulate_network:
         print("⚠️  Network latency simulation enabled (50ms per RPC call)")
@@ -83,16 +93,39 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
                 # 3. Measure uncertainty
                 sampled_ids = draft["sampled_ids"]
                 u_t = sum(d_k != base_draft_id for d_k in sampled_ids) / len(sampled_ids)
-                u_th = threshold_calc.get_threshold()
+                
+                # When collecting data, force threshold to 0
+                if data_collector is not None:
+                    u_th = 0.0
+                else:
+                    u_th = threshold_calc.get_threshold()
 
                 if u_t > u_th:
                     # 4a. Offload to LLM because the SLM is uncertain
                     transmitted_count += 1
-                    accepted, final_token_id, _ = await llm.verify(
+                    verify_result = await llm.verify(
                         session_id=session_id,
                         draft_id=base_draft_id,
                         probs=base_probs,
                     )
+                    # Handle both old (3 values) and new (5 values) return formats
+                    if len(verify_result) == 5:
+                        accepted, final_token_id, _, rejection_prob, y_d_lt_x_d = verify_result
+                    else:
+                        accepted, final_token_id, _ = verify_result
+                        rejection_prob = 0.0
+                        y_d_lt_x_d = False
+                    
+                    # Record data point if collecting
+                    if data_collector is not None:
+                        data_collector.record_data_point(
+                            uncertainty=u_t,
+                            rejection_prob=rejection_prob,
+                            y_d_lt_x_d=y_d_lt_x_d,
+                            session_id=session_id,
+                            draft_id=base_draft_id
+                        )
+                    
                     decision = "TRANSMITTED"
                 else:
                     # 4b. Trust the SLM draft directly
@@ -151,28 +184,52 @@ async def generate_response(prompt, max_tokens=50, K=20, theta_max=2.0, use_chat
     }
 
 
-# Parse command-line arguments
-parser = argparse.ArgumentParser(description='U-HLM: Uncertainty-Aware Hybrid Language Model Inference')
-parser.add_argument('--latency', '--simulate-latency', action='store_true',
-                    help='Simulate 50ms network latency for RPC calls (default: False)')
-parser.add_argument('--use-chat-template', action='store_true',
-                    help='Use chat template formatting for prompts (default: False)')
-args = parser.parse_args()
+# Moved argument parsing inside main() to prevent execution on import
 
 def main():
     """Main inference loop"""
-        
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description='U-HLM: Uncertainty-Aware Hybrid Language Model Inference')
+    parser.add_argument('--latency', '--simulate-latency', action='store_true',
+                        help='Simulate 50ms network latency for RPC calls (default: False)')
+    parser.add_argument('--use-chat-template', action='store_true',
+                        help='Use chat template formatting for prompts (default: False)')
+    parser.add_argument('--collect-data', action='store_true',
+                        help='Collect training data for threshold calculation (sets threshold to 0)')
+    parser.add_argument('--data-file', type=str, default=None,
+                        help='File to save training data (default: slm-service/training_data.jsonl)')
+    parser.add_argument('--max-tokens', type=int, default=50,
+                        help='Maximum tokens to generate per prompt (default: 50)')
+    args = parser.parse_args()
+
+    data_collector = None
+    if args.collect_data:
+        data_collector = DataCollector(data_file=args.data_file)
+        print(f"📊 Data collection enabled. Data will be saved to: {data_collector.data_file}")
+        print(f"   Current data points: {data_collector.get_data_count()}")
+        print(f"   Threshold is set to 0.0 (all tokens will be transmitted)")
+    
     while True:
         prompt = input("\nEnter prompt (or 'q'/'quit' to exit): ").strip()
         
         if prompt.lower() == 'quit' or prompt.lower() == 'q':
+            if data_collector:
+                print(f"\n📊 Total data points collected: {data_collector.get_data_count()}")
             break
         
         if not prompt:
             continue
             
         try:
-            asyncio.run(generate_response(prompt, use_chat_template=args.use_chat_template, simulate_network=args.latency))
+            asyncio.run(generate_response(
+                prompt, 
+                max_tokens=args.max_tokens,
+                use_chat_template=args.use_chat_template, 
+                simulate_network=args.latency,
+                data_collector=data_collector
+            ))
+            if data_collector:
+                print(f"   Data points so far: {data_collector.get_data_count()}")
         except Exception as e:
             print(f"Error generating response: {e}")
             continue
