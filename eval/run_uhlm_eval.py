@@ -18,11 +18,21 @@ repo_root = Path(__file__).resolve().parents[1]
 if str(repo_root) not in sys.path:
     sys.path.insert(0, str(repo_root))
 
+# Add repository root to Python path
+repo_root = Path(__file__).resolve().parents[1]
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
+
+# Add slm-service to path for speculate and utils
+slm_service_path = repo_root / "slm-service"
+if str(slm_service_path) not in sys.path:
+    sys.path.insert(0, str(slm_service_path))
+
 import torch
 import numpy as np
-import speculate
+import speculate  # type: ignore
+import utils  # type: ignore
 from common.rpc_client import UHLMRPCClient
-import utils
 from transformers import AutoTokenizer
 
 # Latency constants (only LLM latency needed for U-HLM)

@@ -7,7 +7,7 @@ import json
 import sys
 from pathlib import Path
 import numpy as np
-from bert_score import score
+from bert_score import score # type: ignore
 from transformers import AutoTokenizer
 from collections import defaultdict
 
