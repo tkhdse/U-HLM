@@ -1,0 +1,802 @@
+[
+  {
+    "prompt": "Is this news article about a miracle cure real or fake news?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Convert this American English text to British English spelling",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Briefly explain what this medical study is about",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Create a fictional dialogue between Einstein and Newton",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Rewrite this technical manual for a non-technical audience",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Simplify this medical jargon for patients to understand",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Hi, how are you doing today?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "What is the contrapositive of: If it rains, the picnic is cancelled?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Provide a synopsis of the movie Inception",
+    "label": "summarization"
+  },
+  {
+    "prompt": "What companies are mentioned in this merger announcement?",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "What emotion is expressed in this text: 'I can't believe they would do this to me!'",
+    "label": "classification"
+  },
+  {
+    "prompt": "Pull out the main conclusions from this research study",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Make this complaint letter sound more professional",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "What are the pros and cons of electric vehicles vs gasoline cars?",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Evaluate the quality of this blog post about nutrition",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Who was the first person to walk on the moon?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "What could be improved in our customer onboarding process?",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "What is the next number in this sequence: 2, 6, 12, 20, 30, ?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Find the flaw in this argument: All birds can fly, penguins are birds, therefore penguins can fly",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Implement a class for a shopping cart in Java",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Write unit tests for a string manipulation function",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Implement a binary search algorithm in JavaScript",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Rate this college application essay on a scale of 1-10",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Recap the main events described in this historical document",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Extract all URLs and hyperlinks from this webpage",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Sorry, I think I gave you the wrong information earlier",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Extract the product names mentioned in this comparison review",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Provide an executive summary of the market analysis report",
+    "label": "summarization"
+  },
+  {
+    "prompt": "I have a quick question about my order",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Compose lyrics for a country song about home",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Create a database schema for an e-commerce application",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "How effective is this email marketing campaign strategy?",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "What is photosynthesis?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Compose a eulogy for a beloved fictional dog character",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Is Wikipedia a reliable source for academic research?",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "List all the people named in this article about the tech conference",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Review this resume for a senior software engineer position",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Write a bash script to backup files to a remote server",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "What are the symptoms of diabetes?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Evaluate the performance of this machine learning model",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Give me the gist of this customer feedback conversation",
+    "label": "summarization"
+  },
+  {
+    "prompt": "If it's raining then the ground is wet, and the ground is wet, what can we conclude?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Let's chat about the latest developments in space exploration",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Analyze the logical structure of this statement: If not A, then B",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Reword this paragraph to avoid the repetitive use of 'very'",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Rewrite this rejection email to be more polite and empathetic",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "What's the main point of this article about renewable energy?",
+    "label": "summarization"
+  },
+  {
+    "prompt": "What are the strengths and weaknesses of the agile methodology?",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Write an opening paragraph for a mystery novel set in London",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Can you condense this research paper into 3 bullet points?",
+    "label": "summarization"
+  },
+  {
+    "prompt": "When did World War II end?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "What is the atomic number of gold?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "What are the highlights of this news story about the election?",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Categorize this product review by sentiment: 'The battery life is okay but the screen is amazing'",
+    "label": "classification"
+  },
+  {
+    "prompt": "Thanks so much for helping me with that problem!",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Write a poem about the changing seasons",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Create a React component that displays a sortable data table",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Write a persuasive speech about environmental conservation",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "What language do they speak in Brazil?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Categorize this expense for accounting: $50 spent on office paper",
+    "label": "classification"
+  },
+  {
+    "prompt": "Is this syllogism valid: All cats are animals, some animals are pets, therefore some cats are pets?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Judge the validity of this claim about vaccine effectiveness",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Where is the Great Barrier Reef located?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Implement a recursive function for calculating factorials",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "How does a combustion engine work?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Implement error handling for database connection failures",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "What type of logical fallacy is: 'Everyone is buying this product, so it must be good'?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Goodbye! It was great chatting with you today",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Categorize this bug report by severity: 'Button color is slightly off from design spec'",
+    "label": "classification"
+  },
+  {
+    "prompt": "Identify the logical fallacy: You can't trust John's opinion on climate change, he's not a scientist",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Write a diary entry from the perspective of a medieval knight",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Identify the cause-effect relationships described in this incident report",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "I don't quite understand what you mean, can you explain it differently?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Extract all dates mentioned in this news article about the product launch",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Convert this sentence to passive voice: The dog chased the cat",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Create a REST API endpoint for user authentication",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "List all the cities and countries mentioned in this travel blog",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "What are the key takeaways from this quarterly financial report?",
+    "label": "summarization"
+  },
+  {
+    "prompt": "What genre does the movie 'The Shawshank Redemption' belong to?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Who is the CEO of Tesla?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Solve this riddle: I have cities but no houses, forests but no trees, water but no fish. What am I?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "What are the main features of Python programming language?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "What restaurant would you recommend for a first date?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Identify the main topics discussed in this podcast transcript",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Write a dramatic scene set in an abandoned hospital",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Identify the language of this text: 'Bonjour, comment allez-vous?'",
+    "label": "classification"
+  },
+  {
+    "prompt": "Write an async function to fetch data from a weather API",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Condense this meeting transcript into action items",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Transform this casual message into a formal business letter",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "How tall is Mount Everest?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Create a metaphor for the passage of time",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Review this Python code for potential security vulnerabilities",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "What is the population of Tokyo?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Restructure this confusing paragraph for better logical flow",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Is this statement a fact or opinion: 'Paris is the most beautiful city in the world'?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Change the tone of this message from casual to academic",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "That explanation makes a lot more sense now, thank you",
+    "label": "conversational"
+  },
+  {
+    "prompt": "If today is Wednesday, what day was it 100 days ago?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Who wrote Romeo and Juliet?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "What category does a wireless mouse belong to: electronics, furniture, or clothing?",
+    "label": "classification"
+  },
+  {
+    "prompt": "If all mammals are warm-blooded, and all dogs are mammals, what can we conclude about dogs?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Is 'Please close the door' a question, statement, or command?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Abstract this neuroscience research paper for me",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Write a Docker configuration for a Node.js application",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "What do you think we should tackle next?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Write a limerick about a clumsy chef",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Write a function to sort a linked list in Python",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Write a regex pattern to match valid email addresses",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Translate this to Spanish: Hello, how are you today?",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Evaluate the ethical implications of using facial recognition in stores",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Solve this logic puzzle: Three friends have different pets. Use the clues to determine who owns what.",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Tell me a bit about yourself and what you can do",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Create a monologue for a misunderstood villain",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Grade this student's answer about the causes of World War I",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Create a short story involving a time-traveling scientist",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "List all the job requirements from this software developer posting",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Assess the risk level of investing in cryptocurrency",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Give me a brief overview of the French Revolution",
+    "label": "summarization"
+  },
+  {
+    "prompt": "When was Albert Einstein born?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "What historical events are described in this timeline document?",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "How far is the Earth from the Sun?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Create a command-line tool that converts CSV to JSON",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Create a CSS animation for a loading spinner",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "What numbers and statistics are mentioned in this annual report?",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Write a children's story about a brave little rabbit",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Distill the following business proposal into its core message",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Rewrite this casual email in a more formal tone",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Determine whether this mathematical proof by induction is valid",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Identify whether this academic paper is formal or informal writing",
+    "label": "classification"
+  },
+  {
+    "prompt": "Summarize this email thread between the sales and marketing teams",
+    "label": "summarization"
+  },
+  {
+    "prompt": "What's your opinion on remote work versus office work?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Pull out all email addresses from this contact list document",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Can we pick up where we left off yesterday?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Extract the ingredients and quantities from this recipe",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Summarize the following article about climate change and its effects on polar ice caps",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Create a one-paragraph summary of chapter 5 of this textbook",
+    "label": "summarization"
+  },
+  {
+    "prompt": "What assumptions does this conclusion rely on: The project will succeed because we have a good team",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Is this email about a Nigerian prince offering money spam or legitimate?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Good morning! I'm ready to get started on my project",
+    "label": "conversational"
+  },
+  {
+    "prompt": "What are the key entities mentioned in this legal contract?",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Convert this bullet list of features into a flowing paragraph",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Compose a love letter from a Victorian-era gentleman",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "How many planets are there in our solar system?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Solve this math word problem: A train leaves at 3pm traveling at 60mph. Another leaves at 4pm at 80mph. When do they meet?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Solve for x: 3x + 7 = 22",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Compose a witty and heartfelt toast for a best friend's wedding",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "What causes earthquakes?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Critique this mobile app design proposal",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Is this movie content appropriate for children under 10?",
+    "label": "classification"
+  },
+  {
+    "prompt": "What is the capital of Australia?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Rewrite this legal document in simpler terms for beginners",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "What year was Google founded?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "Change this blog post from first person to third person",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Make this product description more engaging and persuasive",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Let me think about that suggestion for a moment",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Is this restaurant review positive, negative, or neutral: 'Food was decent, service was slow'?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Paraphrase the following paragraph about artificial intelligence",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Adapt this blog post content for a Twitter thread",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Implement JWT authentication logic for a web application",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Create an imaginative description of an alien civilization",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "What is wrong with this reasoning: 1=2 because 0*1 = 0*2?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "What personality type does this describe: introverted, analytical, prefers working alone?",
+    "label": "classification"
+  },
+  {
+    "prompt": "I really appreciate you being so patient with my questions",
+    "label": "conversational"
+  },
+  {
+    "prompt": "TL;DR this 10-page document about machine learning",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Write flash fiction about a chance encounter in exactly 50 words",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Assess the feasibility of launching this product in Q1",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Identify all technical terms used in this machine learning paper",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "That's really interesting! Can you tell me more about that?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Pull the phone numbers and addresses from this business directory",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Classify this animal based on its description: warm-blooded, has fur, gives live birth",
+    "label": "classification"
+  },
+  {
+    "prompt": "Give me a 2-sentence summary of this product review",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Write a haiku about cherry blossoms",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Convert these rough meeting notes into complete sentences",
+    "label": "text-transformation"
+  },
+  {
+    "prompt": "Compare Python vs JavaScript for web development",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Extract the action items from these meeting notes",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Summarize the main arguments in this philosophy essay about free will",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Can you help me plan my vacation to Italy?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "I'm feeling a bit stressed about my upcoming exam",
+    "label": "conversational"
+  },
+  {
+    "prompt": "Classify the urgency level of this support ticket: 'Website is completely down'",
+    "label": "classification"
+  },
+  {
+    "prompt": "Is this argument about universal basic income convincing? Why or why not?",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Break down this lengthy technical explanation into key points",
+    "label": "summarization"
+  },
+  {
+    "prompt": "Extract all pricing information from this product catalog",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Create a data validation function for credit card numbers",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Compose a song about overcoming heartbreak",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Write a Python function to calculate the Fibonacci sequence",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "What is the probability of rolling two sixes with two dice?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Who invented the telephone?",
+    "label": "information-retrieval"
+  },
+  {
+    "prompt": "What can be deduced from these premises: All roses are flowers, some flowers fade quickly?",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Analyze the cause and effect relationship in this scenario about traffic and pollution",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Calculate the optimal strategy for the Monty Hall problem",
+    "label": "logical-reasoning"
+  },
+  {
+    "prompt": "Implement a Redis caching mechanism for API responses",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Classify the intent of this customer message: 'I want to cancel my subscription immediately'",
+    "label": "classification"
+  },
+  {
+    "prompt": "Write a creative description of a sunset over the ocean",
+    "label": "creative-writing"
+  },
+  {
+    "prompt": "Is using microservices a good solution for our small startup?",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "Rate the user experience of this checkout flow",
+    "label": "evaluation"
+  },
+  {
+    "prompt": "What do you think about artificial intelligence and its future?",
+    "label": "conversational"
+  },
+  {
+    "prompt": "What topic does this article about CRISPR technology cover: politics, science, or sports?",
+    "label": "classification"
+  },
+  {
+    "prompt": "Create a SQL query that finds all customers who made purchases last month",
+    "label": "code-generation"
+  },
+  {
+    "prompt": "Identify the key arguments made by each side in this debate transcript",
+    "label": "information-extraction"
+  },
+  {
+    "prompt": "Make this 500-word essay more concise",
+    "label": "text-transformation"
+  }
+]
